@@ -36,13 +36,13 @@ https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html
 
 # RANCHER SERVER
 
-# --image-id              ami-01e7ca2ef94a0ae86
+# --image-id              ami-0b6d9d3d33ba97d99
 # --instance-type         t3.medium 
 # --key-name              multicloud 
-# --security-group-ids    sg-0b0e8363b215900f0 
-# --subnet-id             subnet-4f5e7705
+# --security-group-ids    sg-05f2fa573cc84684b 
+# --subnet-id             subnet-0b14411a7e1837065
 
-$ aws ec2 run-instances --image-id ami-01e7ca2ef94a0ae86 --count 1 --instance-type t3.medium --key-name multicloud --security-group-ids sg-0b0e8363b215900f0 --subnet-id subnet-67c83f0e --user-data file://rancher.sh --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=rancherserver}]' 'ResourceType=volume,Tags=[{Key=Name,Value=rancherserver}]' 
+$ aws ec2 run-instances --image-id ami-0b6d9d3d33ba97d99 --count 1 --instance-type t3.medium --key-name multicloud --security-group-ids sg-05f2fa573cc84684b --subnet-id subnet-0b14411a7e1837065 --user-data file://rancher.sh --block-device-mappings '[{"DeviceName":"/dev/sda1","Ebs":{"VolumeSize":20,"VolumeType":"gp3"}}]' --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=rancherserver}]' 'ResourceType=volume,Tags=[{Key=Name,Value=rancherserver}]' 
 
 ```
 
@@ -50,7 +50,7 @@ $ aws ec2 run-instances --image-id ami-01e7ca2ef94a0ae86 --count 1 --instance-ty
 ## 3 - Configuração do Rancher
 Acessar o Rancher e configurar
 
-https://3.134.108.244
+https://44.200.171.155/
 
 ## 4 - Configuração do Cluster Kubernetes.
 Criar o cluster pelo Rancher e configurar.
@@ -59,19 +59,21 @@ Criar o cluster pelo Rancher e configurar.
 
 ## 5 - Deployment do cluster pela aws-cli
 
+`k8s.sh` lê `RANCHER_SERVER`, `RANCHER_TOKEN` e `RANCHER_CA_CHECKSUM` do ambiente (valores obtidos na tela de "Registrar Cluster" do Rancher). Antes de rodar o `run-instances`, exporte-os localmente e prefixe o `k8s.sh` com os `export` correspondentes ao gerar o user-data, ou injete-os via SSM Parameter Store / Secrets Manager — não deixe o token em texto plano no arquivo.
+
 ```sh
-# --image-id ami-01e7ca2ef94a0ae86
+# --image-id ami-0b6d9d3d33ba97d99
 # --count 3 
 # --instance-type t3.large 
 # --key-name multicloud 
-# --security-group-ids sg-0b0e8363b215900f0 
-# --subnet-id subnet-09c5a4961e6056757 
+# --security-group-ids sg-05f2fa573cc84684b  
+# --subnet-id subnet-0ae0a71ee419dd27a
 # --user-data file://k8s.sh
 
-$ aws ec2 run-instances --image-id ami-01e7ca2ef94a0ae86 --count 3 --instance-type t3.large --key-name multicloud --security-group-ids sg-0b0e8363b215900f0 --subnet-id subnet-67c83f0e --user-data file://k8s.sh   --block-device-mapping "[ { \"DeviceName\": \"/dev/sda1\", \"Ebs\": { \"VolumeSize\": 70 } } ]" --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=k8s}]' 'ResourceType=volume,Tags=[{Key=Name,Value=k8s}]'     
+$ aws ec2 run-instances --image-id ami-0b6d9d3d33ba97d99 --count 3 --instance-type t3.large --key-name multicloud --security-group-ids sg-05f2fa573cc84684b --subnet-id subnet-0ae0a71ee419dd27a --user-data file://k8s.sh --block-device-mapping "[ { \"DeviceName\": \"/dev/sda1\", \"Ebs\": { \"VolumeSize\": 70 } } ]" --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=k8s}]' 'ResourceType=volume,Tags=[{Key=Name,Value=k8s}]'  
 ```
 
-Instalar o kubectl 
+## Instalar o kubectl 
 
 https://kubernetes.io/docs/tasks/tools/
 
