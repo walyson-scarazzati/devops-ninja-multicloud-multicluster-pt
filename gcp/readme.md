@@ -23,7 +23,7 @@ $ gcloud compute instance-templates create multicloud \
    --boot-disk-size=60GB \
    --subnet=default \
    --tags=allow-health-check \
-   --image-family=debian-9 \
+   --image-family=debian-12 \
    --image-project=debian-cloud \
    --machine-type=e2-medium \
    --metadata-from-file startup-script=install-k8s2.sh
@@ -41,13 +41,13 @@ $ gcloud compute instance-groups set-named-ports multicloud-backend \
 
 
 # Configuring a firewall rule
-# $ gcloud compute firewall-rules create # fw-allow-health-check \
-#     --network=default \
-#     --action=allow \
-#     --direction=ingress \
-#     --source-ranges=130.211.0.0/22,35.191.0.0/16 \
-#     --target-tags=allow-health-check \
-#     --rules=tcp:80
+$ gcloud compute firewall-rules create fw-allow-health-check \
+    --network=default \
+    --action=allow \
+    --direction=ingress \
+    --source-ranges=130.211.0.0/22,35.191.0.0/16 \
+    --target-tags=allow-health-check \
+    --rules=tcp:80,tcp:443
 
 ```
 
@@ -69,7 +69,7 @@ $ kubectl apply -f traefik.yaml
 
 # 3 - Configuração Longhorn
 
-
+*.multicloud-devops-ninja.pt
 
 # 4 -  Criação do certificado não válido
 
@@ -122,19 +122,20 @@ $ gcloud compute addresses describe lb-ipv4-1 \
     --format="get(address)" \
     --global
 
-#  34.96.99.180
+#  8.232.35.145
 
 # SETUP
 
 # Healthcheck
-$ gcloud compute health-checks create http http-basic-check \
-	--port 8080 \
-  --request-path /api/providers
-    
+$ gcloud compute health-checks create https http-basic-check \
+    --port 443 \
+    --request-path /api/overview \
+    --host traefik.multicloud-devops-ninja.pt
+
 # Backend Service
 $ gcloud compute backend-services create web-backend-service \
-    --protocol=HTTP \
-    --port-name=http \
+    --protocol=HTTPS \
+    --port-name=https \
     --health-checks=http-basic-check \
     --global
 
@@ -154,7 +155,7 @@ $  gcloud compute url-maps create web-map-https \
 
 # Criar um http proxy para fazer o  roteamento
 $ gcloud compute target-https-proxies create https-lb-proxy \
-    --url-map web-map-https --ssl-certificates multicloud
+    --url-map web-map-https --ssl-certificates devops-ninja
     
 # Criar regra global de forwarding 
 $ gcloud compute forwarding-rules create https-content-rule \
