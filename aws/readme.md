@@ -199,6 +199,16 @@ $ aws elbv2 describe-target-health --target-group-arn targetgroup-arn
 $ aws elbv2 describe-listeners --listener-arns arn:aws:elasticloadbalancing:us-east-1:984102645395:listener/app/multicloud/0c7e036793bff35e/a7386cf3e0dc3c0e
 
 
+# banco dados 
+$ kubectl -n jonjon run cockroachdb -it \
+--image=cockroachdb/cockroach:v23.2.31 \
+--rm \
+--restart=Never \
+-- sql \
+--insecure \
+--host=cockroachdb.jonjon.svc.cluster.local
+
+
 ```
 
 

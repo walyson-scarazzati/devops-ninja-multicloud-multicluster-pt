@@ -9,3 +9,12 @@ spec:
     api:
       dashboard: true
       insecure: false
+    service:
+          type: NodePort
+    ports:
+      web:
+        nodePort: 30700
+      websecure:
+        nodePort: 32655
+      traefik:
+        nodePort: 30900

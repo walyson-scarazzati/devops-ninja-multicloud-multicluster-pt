@@ -1,6 +1,6 @@
 data:
   api.js: |
-    var api       = "https://api.devops-ninja.ml";
+    var api       = "https://api.multicloud-devops-ninja.pt";
     var VideoPath = "/video";
     var SongPath  = "/song";
     var BookPath  = "/book";

@@ -8,11 +8,9 @@ spec:
   ingressClassName: traefik
   entryPoints:
     - web
-    - websecure
   routes:
     - match: Host(`traefik.multicloud-devops-ninja.pt`) && (PathPrefix(`/dashboard`) || PathPrefix(`/api`))
       kind: Rule
       services:
         - name: api@internal
           kind: TraefikService
-  tls: {}
