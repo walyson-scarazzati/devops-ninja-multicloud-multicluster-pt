@@ -4,14 +4,23 @@ spec:
       http:
         paths:
           - path: /book
+            pathType: Prefix
             backend:
-              serviceName: api-book
-              servicePort: 80
+              service:
+                name: api-book
+                port:
+                  number: 80
           - path: /song
+            pathType: Prefix
             backend:
-              serviceName: api-song
-              servicePort: 80
+              service:
+                name: api-song
+                port:
+                  number: 80
           - path: /video
+            pathType: Prefix
             backend:
-              serviceName: api-video
-              servicePort: 80
+              service:
+                name: api-video
+                port:
+                  number: 80

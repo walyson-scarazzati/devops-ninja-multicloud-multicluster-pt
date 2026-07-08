@@ -1,1 +1,34 @@
 
+# https://doc.traefik.io/traefik/v3.0/routing/providers/kubernetes-ingress/
+---
+kind: Ingress
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: api
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: api.rancher
+      http:
+        paths:
+          - path: /book
+            pathType: Prefix
+            backend:
+              service:
+                name: api-book
+                port:
+                  number: 80
+          - path: /song
+            pathType: Prefix
+            backend:
+              service:
+                name: api-song
+                port:
+                  number: 80
+          - path: /video
+            pathType: Prefix
+            backend:
+              service:
+                name: api-video
+                port:
+                  number: 80

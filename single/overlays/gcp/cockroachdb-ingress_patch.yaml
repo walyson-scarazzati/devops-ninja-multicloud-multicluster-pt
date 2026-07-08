@@ -3,6 +3,10 @@ spec:
     - host: cockroachdb.multicloud-devops-ninja.pt
       http:
         paths:
-          - backend:
-              serviceName: cockroachdb
-              servicePort: 8080
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: cockroachdb
+                port:
+                  number: 8080
