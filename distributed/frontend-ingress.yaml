@@ -1,20 +1,19 @@
 ---
 kind: Ingress
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 metadata:
   name: 2mc-frontend
-  annotations:
 spec:
+  ingressClassName: traefik
   rules:
     - host: app.rancher
       http:
         paths:
-          - backend:
-              serviceName: mc-frontend
-              servicePort: 8000
-
-    
-
-
-
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: mc-frontend
+                port:
+                  number: 80
 
