@@ -1,6 +1,6 @@
 spec:
   rules:
-    - host: app.multicloud.ml
+    - host: app.multicloud-devops-ninja.pt"
       http:
         paths:
           - backend:

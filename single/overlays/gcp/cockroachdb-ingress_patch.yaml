@@ -1,6 +1,6 @@
 spec:
   rules:
-    - host: cockroachdb.multicloud.ml
+    - host: cockroachdb.multicloud-devops-ninja.pt
       http:
         paths:
           - backend:
